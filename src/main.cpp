@@ -4,6 +4,8 @@
 #include <iostream>
 #include <math.h>
 #include <sstream>
+#include <cstdio>
+#include <ctime>
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -62,7 +64,9 @@ int Usage(char* arg0, int file)
 int main(int argc, char* argv[])
 { 
     if (argc != 5) return Usage(argv[0], 0);  
-    
+    std::clock_t start;
+    double duration;
+    start = std::clock();
     // check if bounds are valid
     istringstream lower(argv[3]);
     istringstream higher(argv[4]);
@@ -136,8 +140,12 @@ int main(int argc, char* argv[])
 	if (index == -1){
 		return Usage(argv[0], 6);
 	}else {
-		cout << files[index] << endl;
-	}	
+        cout << "Book suggestion: "  << files[index] << endl;
+	}
+    
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    
+    std::cout<<"Time elapsed: "<< duration <<'\n';
     
     return 0;
 }
