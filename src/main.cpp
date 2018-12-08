@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cstdio>
 #include <ctime>
+#include <sys/time.h>
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -67,9 +68,14 @@ int main(int argc, char* argv[])
     using namespace std;
     
     if (argc != 5) return Usage(argv[0], 0);  
-    std::clock_t start;
-    double duration;
-    start = std::clock();
+    //std::clock_t start;
+    //double duration;
+    //start = std::clock();
+    
+    struct timeval start, end;
+    gettimeofday(&start, NULL);
+    double delta;
+    
     // check if bounds are valid
     istringstream lower(argv[3]);
     istringstream higher(argv[4]);
@@ -146,9 +152,13 @@ int main(int argc, char* argv[])
             cout << "Book suggestion: "  << files[index] << endl;
 	}
     
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    //duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    //std::cout<<"Time elapsed: "<< duration <<'\n';
     
-    std::cout<<"Time elapsed: "<< duration <<'\n';
+    gettimeofday(&end, NULL);
+    delta = ((end.tv_sec  - start.tv_sec) * 1000000u +
+             end.tv_usec - start.tv_usec) / 1.e6;
+    std::cout<<"Time elapsed: "<< delta <<'\n';
     
     return 0;
 }
