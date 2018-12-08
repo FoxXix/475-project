@@ -4,10 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <sstream>
-<<<<<<< HEAD
 #include <cstdio>
-=======
->>>>>>> b9270a0f22bdf10cacd147886be2b5518eb38e50
 #include <ctime>
 using std::cout;
 using std::cerr;
@@ -68,7 +65,6 @@ int Usage(char* arg0, int file)
 int main(int argc, char* argv[])
 {
     using namespace std;
-    clock_t begin = clock();
     
     if (argc != 5) return Usage(argv[0], 0);  
     std::clock_t start;
@@ -143,24 +139,16 @@ int main(int argc, char* argv[])
 			index = i;
 		}
     }	
-	
-    clock_t end = clock();
-    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     
 	if (index == -1){
 		return Usage(argv[0], 6);
 	}else {
-<<<<<<< HEAD
-        cout << "Book suggestion: "  << files[index] << endl;
+            cout << "Book suggestion: "  << files[index] << endl;
 	}
     
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     
     std::cout<<"Time elapsed: "<< duration <<'\n';
-=======
-        cout << "Time elapsed: " << elapsed_secs << " seconds" << endl;
-	}	
->>>>>>> b9270a0f22bdf10cacd147886be2b5518eb38e50
     
     return 0;
 }
