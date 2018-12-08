@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <sstream>
+#include <ctime>
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -12,6 +13,7 @@ using std::ifstream;
 using std::istringstream;
 
 // test ryan branch
+
 
 /// Print the correct usage in case of user syntax error.
 int Usage(char* arg0, int file)
@@ -60,7 +62,10 @@ int Usage(char* arg0, int file)
 }
 
 int main(int argc, char* argv[])
-{ 
+{
+    using namespace std;
+    clock_t begin = clock();
+    
     if (argc != 5) return Usage(argv[0], 0);  
     
     // check if bounds are valid
@@ -133,10 +138,13 @@ int main(int argc, char* argv[])
 		}
     }	
 	
+    clock_t end = clock();
+    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    
 	if (index == -1){
 		return Usage(argv[0], 6);
 	}else {
-		cout << files[index] << endl;
+        cout << "Time elapsed: " << elapsed_secs << " seconds" << endl;
 	}	
     
     return 0;
