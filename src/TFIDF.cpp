@@ -9,7 +9,8 @@ bool TFIDF::compare(ostream& ostr)
 			intersection(documents[0], documents[j]);
 			sum = 0;
 			// For every word in the intersection of the documents, multiply the two TFIDF scores together, and sum those products
-			for (double k = 0; k < intersect.size(); k++){
+#pragma omp parallel for shared(sum)
+			for (unsigned int k = 0; k < intersect.size(); k++){
 				sum += (tfidf(intersect[k], documents[0]) * tfidf(intersect[k], documents[j]));
 			}
 			intersect.clear();
@@ -28,7 +29,6 @@ double TFIDF::compare(WordCount& doc1, WordCount& doc2)
     
     // populate the intersect vector
     intersection(doc1, doc2);
-    #pragma omp parallel for shared(sum)
     // For every word in the intersection of the documents, multiply the two TFIDF scores together, and sum those products
     for (unsigned int k = 0; k < intersect.size(); k++){
         sum += (tfidf(intersect[k], doc1) * tfidf(intersect[k], doc2));
@@ -56,7 +56,6 @@ double TFIDF::idf(string& word)
 double TFIDF::numberOfDocsContainingWord(string& word)
 {
 	double count = 0;
-    #pragma omp parallel for shared(count)
 	for (unsigned int i = 0; i < documents.size(); i++){
 		if (documents[i].findWordCount(word) > 0){
 			count++;
@@ -68,18 +67,20 @@ double TFIDF::numberOfDocsContainingWord(string& word)
 
 void TFIDF::intersection(WordCount& doc1, WordCount& doc2)
 {
-	for (double i = 0; i < doc1.f_words.size(); i++){
-		for (double j = 0; j < doc2.f_words.size(); j++){
+	for (unsigned int i = 0; i < doc1.f_words.size(); i++){
+        volatile bool flag = false;
+#pragma omp parallel for shared(flag)
+		for (unsigned int j = 0; j < doc2.f_words.size(); j++){
 			if (doc1.f_words[i] == doc2.f_words[j]){
 				// words must not be punctuation words...
+                if(flag) continue;
 				if (!isPunct(doc1.f_words[i])) {
 					intersect.push_back(doc1.f_words[i]);
-					continue;
+                    flag = true;
 				}
 			}
 		}
 	}
-	
 }
 
 bool TFIDF::isPunct(const string& word) const
