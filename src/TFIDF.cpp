@@ -28,8 +28,9 @@ double TFIDF::compare(WordCount& doc1, WordCount& doc2)
     
     // populate the intersect vector
     intersection(doc1, doc2);
+    #pragma omp parallel for shared(sum)
     // For every word in the intersection of the documents, multiply the two TFIDF scores together, and sum those products
-    for (double k = 0; k < intersect.size(); k++){
+    for (unsigned int k = 0; k < intersect.size(); k++){
         sum += (tfidf(intersect[k], doc1) * tfidf(intersect[k], doc2));
     }
     intersect.clear();
@@ -55,7 +56,8 @@ double TFIDF::idf(string& word)
 double TFIDF::numberOfDocsContainingWord(string& word)
 {
 	double count = 0;
-	for (double i = 0; i < documents.size(); i++){
+    #pragma omp parallel for shared(count)
+	for (unsigned int i = 0; i < documents.size(); i++){
 		if (documents[i].findWordCount(word) > 0){
 			count++;
 		}
