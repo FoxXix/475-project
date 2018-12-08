@@ -3,7 +3,7 @@ CC = g++
 
 O_FILES = wordCount.o Exceptions.o main.o Lexeme.o Stemmer.o TFIDF.o
 # Compiler flags
-LFLAGS = -o PA9
+LFLAGS = -o PA9 -fopenmp
 CFLAGS = -Wall -I. -c -fopenmp
 
 PA9: $(O_FILES)
