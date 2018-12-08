@@ -12,6 +12,8 @@ using std::endl;
 using std::ifstream;
 using std::istringstream;
 
+// test github rschlac
+
 /// Print the correct usage in case of user syntax error.
 int Usage(char* arg0, int file)
 {
